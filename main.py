@@ -1,14 +1,17 @@
-import requests
-import json
+from fastapi import FastAPI
+from pydantic import BaseModel
 
-def main():
-    url = 'http://127.0.0.1:8000'
-    data = {
-        'x': 2,
-        'y': 3,
-    }
-    res = requests.post(url, json.dumps(data))
-    print(res.json())
+class Data(BaseModel):
+    x: int
+    y: int
 
-if __name__ == '__main__':
-    main()
+app = FastAPI()
+
+@app.get('/')
+async def index():
+    return {'message': 'Hello Data'}
+
+@app.post('/')
+async def calc(data: Data):
+    z = data.x*data.y
+    return {'result': z}
