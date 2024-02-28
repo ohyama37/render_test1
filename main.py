@@ -1,23 +1,14 @@
-from fastapi import FastAPI
-from typing import Optional, List
-from pydantic import BaseModel, Field
+import requests
+import json
 
-class ShopInfo(BaseModel):
-    name: str
-    location: str
+def main():
+    url = 'http://127.0.0.1:8000'
+    data = {
+        'x': 2,
+        'y': 3,
+    }
+    res = requests.post(url, json.dumps(data))
+    print(res.json())
 
-class Item(BaseModel):
-    name: str = Field(min_length=4, max_length=12)
-    description: Optional[str] = None
-    price: int
-    tax: Optional[float] = None
-
-class Data(BaseModel):
-    shop_info: Optional[ShopInfo] = None
-    items: List[Item]
-
-app = FastAPI()
-
-@app.post("/")
-async def index(data: Data):
-    return {"data" : data}
+if __name__ == '__main__':
+    main()
